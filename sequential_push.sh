@@ -2,12 +2,20 @@
 # 依次将每个 commit 推到 GitHub（需 Personal Access Token，权限含 repo）
 # 用法：  export GITHUB_TOKEN=ghp_xxxx
 #        bash sequential_push.sh
+# 或：    仅一行 token 写入文件： echo -n ghp_xxx > ~/.github_pat && chmod 600 ~/.github_pat
+#        export GITHUB_TOKEN_FILE=$HOME/.github_pat && bash sequential_push.sh
 set -euo pipefail
 cd "$(dirname "$0")"
 
+if [[ -z "${GITHUB_TOKEN:-}" && -n "${GITHUB_TOKEN_FILE:-}" && -f "${GITHUB_TOKEN_FILE}" ]]; then
+  GITHUB_TOKEN="$(tr -d '\n\r' < "${GITHUB_TOKEN_FILE}")"
+  export GITHUB_TOKEN
+fi
+
 if [[ -z "${GITHUB_TOKEN:-}" ]]; then
-  echo "错误：请先设置环境变量 GITHUB_TOKEN（GitHub → Settings → Developer settings → Fine-grained 或 classic PAT，勾选 repo）"
+  echo "错误：需要 GITHUB_TOKEN 或 GITHUB_TOKEN_FILE（GitHub → Settings → Developer settings → PAT，勾选 repo）"
   echo "示例： export GITHUB_TOKEN=ghp_xxxxxxxx"
+  echo "或：   export GITHUB_TOKEN_FILE=/path/to/file   # 文件内仅一行 token"
   exit 1
 fi
 
