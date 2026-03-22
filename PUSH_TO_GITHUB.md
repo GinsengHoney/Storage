@@ -1,6 +1,19 @@
 # 推送到 GitHub（本机/集群需登录）
 
-当前仓库已在 **`/home/ray/default/Storage_repo`** 完成 **`git commit`**（含 Git LFS 指针），但 **`git push` 需要你的凭据**，本环境无法代你登录。
+当前仓库已在 **`/home/ray/default/Storage_repo`** 完成 **`git commit`**（含 Git LFS 指针），但 **`git push` 需要你的凭据**，云端无法代你登录。
+
+## 推荐：依次上传（每个压缩包一次提交）
+
+仓库已按 **由小到大** 拆成 **8 个提交**（README + 7 个 `folder_*.tar.gz`）+ **1 个脚本提交**。在 **`Storage_repo`** 目录执行：
+
+```bash
+export GITHUB_TOKEN=ghp_你的_PAT
+bash sequential_push.sh
+```
+
+脚本会 **按顺序** 把每个 commit 推到 `main`（便于中途失败时从断点继续；LFS 会随对应提交上传）。
+
+---
 
 任选一种方式：
 
